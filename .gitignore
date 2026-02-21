@@ -8,3 +8,6 @@ node_modules/
 .next/
 .env*.local
 .DS_Store
+
+# Use npm (package-lock.json) for deployment — exclude pnpm lockfile
+pnpm-lock.yaml
