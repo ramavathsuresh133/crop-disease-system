@@ -100,13 +100,15 @@ function analyzeImageColors(file: File): Promise<{ valid: boolean; reason: strin
       const skinRatio = skinPixels / total
       const greenRatio = strictGreenPixels / total
 
-      // Reject if significant skin tones detected (human/person photo)
-      if (skinRatio > 0.10) {
+      // Reject if very significant skin tones detected (human/person photo)
+      // Threshold increased from 0.10 to 0.35 to avoid flagging brown diseased areas as skin
+      if (skinRatio > 0.35) {
         resolve({ valid: false, reason: "Human or person detected in the image. Please upload a crop or plant leaf photo only." })
         return
       }
-      // Require at least 20% strong plant-green pixels
-      if (greenRatio < 0.20) {
+      // Require at least 5% strong plant-green pixels (decreased from 20%)
+      // This allows for fruits, soil, or heavily diseased plants that aren't mostly green
+      if (greenRatio < 0.05) {
         resolve({ valid: false, reason: "The image doesn't appear to contain sufficient crop or plant content. Please upload a clear photo of a crop leaf or plant." })
         return
       }
